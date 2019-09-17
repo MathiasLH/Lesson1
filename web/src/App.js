@@ -8,7 +8,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-            it just werks!
+            it just werks! now with autopipe!
         </p>
         <a
           className="App-link"

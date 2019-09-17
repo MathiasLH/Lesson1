@@ -14,6 +14,73 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <tomcat.version>9.0.21</tomcat.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <activation>
+                <property>
+                    <name>!env.HEROKUBUILD</name>
+                </property>
+            </activation>
+            <id>local</id>
+            <build>
+                <plugins>
+                    <!-- NPM build -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>web</workingDirectory>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>build</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Copy NPM build to java webapp folder -->
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/src/main/webapp</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/web/build</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <nonFilteredFileExtensions>
+
+                                <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+                            </nonFilteredFileExtensions>
+                        </configuration>
+                    </plugin>                </plugins>
+            </build>
+        </profile>
+    </profiles>
     
     <dependencies>
         <!--Embedded Tomcat-->
@@ -93,66 +160,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
-
-            <!-- NPM build -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <workingDirectory>web</workingDirectory>
-                            <executable>npm</executable>
-                            <arguments>
-                                <argument>run</argument>
-                                <argument>build</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Copy NPM build to java webapp folder -->
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/main/webapp</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/web/build</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-
-                    </execution>
-                </executions>
-                <configuration>
-                    <nonFilteredFileExtensions>
-
-                        <nonFilteredFileExtension>woff</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
-            </plugin>
-
-
-
-
         </plugins>
     </build>
 
