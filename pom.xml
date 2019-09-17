@@ -77,7 +77,8 @@
                                 <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
                             </nonFilteredFileExtensions>
                         </configuration>
-                    </plugin>                </plugins>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
     </profiles>
